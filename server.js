@@ -32,7 +32,6 @@ app.get("/all", (req, res) => {
   db.query('SELECT * FROM users;', (error, response) => {
     console.log(response);
     console.log(error);
-    if (error) throw error;
     res.json(response)
   });
   
