@@ -7,7 +7,7 @@ const { Client } = require('pg');
 // const signin = require("./controller/signin");
 // const register = require("./controller/register");
 // const img = require("./controller/img");
-// const profile = require("./controller/profile");
+const profile = require("./controller/profile");
 
 
 
