@@ -12,13 +12,9 @@ const auth = require('./controllers/authorization');
 
 //Database Setup - add your own information here based on the DB you created
 const db = knex({
-  client: 'pg',
-  connection: {
-    host : '127.0.0.1',
-    user : 'aneagoie',
-    password : '',
-    database : 'smart-brain'
-  }
+  client: "pg",
+  connectionString: process.env.DATABASE_URL,
+  ssl: true
 });
 
 const app = express();
@@ -33,6 +29,7 @@ app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfile
 app.put('/image', auth.requireAuth, (req, res) => { image.handleImage(req, res, db)})
 app.post('/imageurl', auth.requireAuth, (req, res) => { image.handleApiCall(req, res)})
 
-app.listen(3000, ()=> {
-  console.log('app is running on port 3000');
-})
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`app is running on port ${PORT}`);
+});
