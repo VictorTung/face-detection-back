@@ -22,28 +22,14 @@ const profile = require("./controller/profile");
 
 // heroku
 
-// const { Client } = require('pg');
+const { Client } = require("pg");
 
-// const client = new Client({
-//   connectionString: process.env.DATABASE_URL,
-//   ssl: {
-//     rejectUnauthorized: false
-//   }1
-// });
-
-const db = knex({
-  client: 'pg',
+const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 });
-
-console.log(1);
-console.log(process.env);
-console.log(process.env.DATABASE_URL);
-console.log(1);
-console.log(db);
 
 const app = express();
 
@@ -51,10 +37,8 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/all", (req, res) => {
-  db.select("*")
-    .from("login")
-    .then((user) => res.json(user))
-    .catch(err => console.log(err))
+  const { rows } = await client.query("SELECT * FROM login");
+  res.json(rows[0]);
 });
 
 app.get("/", (req, res) => {
