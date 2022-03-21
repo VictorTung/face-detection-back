@@ -34,10 +34,9 @@ const handleRegister = (db, bcrypt) => async (req, res) => {
   const client = await pool.connect()
 
   try{
-    await client.query('BEGIN')
     const loginText = `INSERT INTO login(email, hash) VALUES($1, $2) RETURNING email`
     const loginValue = [email, password]
-    const res = await client.query(queryText, queryValue)
+    const res = await client.query(loginText, loginValue)
 
     const userText = 'INSERT INTO users(name, email) VALUES($1, $2)'
     const userValue = [name, res.rows[0].email]
@@ -50,6 +49,7 @@ const handleRegister = (db, bcrypt) => async (req, res) => {
   } finally {
     client.release()
   }
+  client.end();
 };
 
 module.exports = {
