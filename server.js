@@ -47,10 +47,10 @@ app.get("/", (req, res) => {
   res.send("work!");
 });
 
-app.get("/profile/:id", profile.handleProfile(db, bcrypt));
-app.post("/signin", signin.handleSignIn(db, bcrypt));
-app.post("/register", register.handleRegister(db, bcrypt));
-app.put("/img", img.handleImage(db, bcrypt));
+app.get("/profile/:id", profile.handleProfile(client, bcrypt));
+app.post("/signin", signin.handleSignIn(client, bcrypt));
+app.post("/register", register.handleRegister(client, bcrypt));
+app.put("/img", img.handleImage(client, bcrypt));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
