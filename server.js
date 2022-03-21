@@ -40,9 +40,9 @@ app.post("/add", async (req, res) => {
   const queryText = 'INSERT INTO login(email, hash) VALUES($1,$2) RETURNING email'
   const response = await db.query(queryText, [email, hash])
   const insertuser = 'INSERT INTO users(name, email, joined) VALUES ($1, $2, $3) RETURNING *'
-  const insertuserValues = [name, response.rows[0], new Date()]
+  const insertuserValues = [name, response.rows[0].email, new Date()]
   const user = await db.query(insertuser, insertuserValues)
-  res.json(user.rows[0].email)
+  res.json(user.rows[0])
 });
 
 
