@@ -21,7 +21,7 @@ const handleRegister = (db, bcrypt) => (req, res) => {
       console.log(res);
       console.log(1);
       const insertuser = 'INSERT INTO users(name, email, hash) VALUES ($1, $2, $3)'
-      const insertuserValues = [name, res, password]
+      const insertuserValues = [name, res.rows[0].email, password]
       await db.query(insertuser, insertuserValues)
       await db.query('COMMIT')
     } catch (e) {
