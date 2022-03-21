@@ -29,12 +29,12 @@ app.get("/", (req, res) => res.send('workging'));
 app.get("/all", (req, res) => {
   client.connect();
 
-  client.query('SELECT * FROM users;', (error, response) => {
+  db.query('SELECT * FROM users;', (error, response) => {
     if (error) throw error;
     res.json(response)
   });
   
-  client.end();
+  db.end();
 });
 app.get("/profile/:id", profile.handleProfile(db, bcrypt));
 app.post("/signin", signin.handleSignIn(db, bcrypt));
