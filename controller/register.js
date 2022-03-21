@@ -46,7 +46,7 @@ const handleRegister = (db, bcrypt) => async (req, res) => {
     await client.query('COMMIT')
   } catch(e){
     await client.query('ROLLBACK')
-    throw e
+    res.status(400).json('some errorrrr')
   } finally {
     client.release()
   }
