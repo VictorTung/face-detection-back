@@ -27,7 +27,7 @@ app.use(cors());
 
 app.get("/", (req, res) => res.send('workging'));
 app.get("/all", (req, res) => {
-  client.connect();
+  db.connect();
 
   db.query('SELECT * FROM users;', (error, response) => {
     if (error) throw error;
