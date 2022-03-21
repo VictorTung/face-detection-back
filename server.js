@@ -3,40 +3,54 @@ const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
 
-// const register = require('./controllers/register');
-// const signin = require('./controllers/signin');
-// const profile = require('./controllers/profile');
-// const image = require('./controllers/image');
+const signin = require("./controller/signin");
+const register = require("./controller/register");
+const img = require("./controller/img");
+const profile = require("./controller/profile");
 
-const { Client } = require("pg");
+// My PC
+// const db = knex({
+//   client: "pg",
+//   connection: {
+//     host: "127.0.0.1",
+//     port: 5432,
+//     user: "postgres",
+//     password: "password",
+//     database: "smart-brain",
+//   },
+// });
 
-const client = new Client({
+// heroku
+
+console.log(process.env.DATABASE_URL);
+
+const db = knex({
+  client: "pg",
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: { rejectUnauthorized: false },
 });
-
-client.connect();
 
 const app = express();
 
+app.use(express.json());
 app.use(cors());
-app.use(express.json()); // latest version of exressJS now comes with Body-Parser!
 
-app.get("/", (req, res) => {
-  client
-    .query('SELECT * FROM login WHERE id = $1', [1])
-    .then(data=> res.json(data))
+app.get("/all", (req, res) => {
+  db.select("*")
+    .from("login")
+    .then((user) => res.json(user[0]));
 });
 
-// app.get('/', (req, res)=> { res.send(db.login) })
-// app.post('/signin', signin.handleSignin(db, bcrypt))
-// app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
-// app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db)})
-// app.put('/image', (req, res) => { image.handleImage(req, res, db)})
-// app.post('/imageurl', (req, res) => { image.handleApiCall(req, res)})
+app.get("/", (req, res) => {
+  res.send("work!");
+});
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("app is running on port process.env.PORT");
+app.get("/profile/:id", profile.handleProfile(db, bcrypt));
+app.post("/signin", signin.handleSignIn(db, bcrypt));
+app.post("/register", register.handleRegister(db, bcrypt));
+app.put("/img", img.handleImage(db, bcrypt));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`app is running on port ${PORT}`);
 });
