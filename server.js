@@ -45,7 +45,8 @@ app.use(cors());
 app.get("/all", (req, res) => {
   db.select("*")
     .from("login")
-    .then((user) => res.json(user));
+    .then((user) => res.json(user))
+    .catch(err => console.log(err))
 });
 
 app.get("/", (req, res) => {
