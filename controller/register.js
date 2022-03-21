@@ -1,7 +1,12 @@
 const { Pool } = require('pg')
-const pool = new Pool()
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+})
 
-const handleRegister = (db, bcrypt) => (req, res) => {
+const handleRegister = (bcrypt) => (req, res) => {
   const { name, password, email } = req.body;
   const hash = bcrypt.hashSync(password);
   
@@ -17,12 +22,10 @@ const handleRegister = (db, bcrypt) => (req, res) => {
       await db.query('BEGIN')
       const queryText = 'INSERT INTO login(email, hash) VALUES($1,$2) RETURNING email'
       const response = await db.query(queryText, [email, hash])
-      console.log(1);
-      console.log(response);
-      console.log(1);
-      const insertuser = 'INSERT INTO users(name, email, hash) VALUES ($1, $2, $3)'
-      const insertuserValues = [name, response.rows[0].email, password]
-      await db.query(insertuser, insertuserValues)
+      const insertuser = 'INSERT INTO users(name, email, joined) VALUES ($1, $2, $3) RETURNING *'
+      const insertuserValues = [name, response.rows[0].email, new Date()]
+      const user = await db.query(insertuser, insertuserValues)
+      res.json(user.rows[0])
       await db.query('COMMIT')
     } catch (e) {
       await db.query('ROLLBACK')
