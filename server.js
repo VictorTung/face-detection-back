@@ -37,7 +37,7 @@ app.use(express.json()); // latest version of exressJS now comes with Body-Parse
 
 app.get("/", (req, res) => {
   client
-    .query('SELECT * FROM login WHERE id = $1'. [1])
+    .query('SELECT * FROM login WHERE id = $1', [1])
     .then(data=> res.json(data))
 });
 
