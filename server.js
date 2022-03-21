@@ -1,14 +1,15 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-const cors = require('cors');
-const signin = require('./controllers/signin.js');
-const register = require('./controllers/register.js');
-const profile = require('./controllers/profile.js');
-const image = require('./controllers/image.js');
-const { check, validationResult } = require('express-validator/check');
-const knex = require('knex')({
-  client: 'pg',
+const express = require("express");
+const bcrypt = require("bcrypt-nodejs");
+const cors = require("cors");
+const knex = require("knex");
+
+const signin = require("./controller/signin");
+const register = require("./controller/register");
+const img = require("./controller/img");
+const profile = require("./controller/profile");
+
+const db = knex({
+  client: "pg",
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
@@ -16,41 +17,18 @@ const knex = require('knex')({
 });
 
 const app = express();
-// middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+
+app.use(express.json());
 app.use(cors());
 
-// just a greet message
-app.get('/', (req, res) => {
-  res.json('It is working!');
-});
-// signin endpoint
-app.post('/signin', [
-  check('email').isEmail().normalizeEmail(),
-  check('password').isLength({min:3}).escape()
-],(req, res) => {
-	signin.handleSignIn(req, res, knex, bcrypt, validationResult);
-});
-// register endpoint
-app.post('/register', [
-  check('name').isLength({min:2}).trim().escape(),
-  check('email').isEmail().normalizeEmail(),
-  check('password').isLength({min:3}).escape()
-], (req, res) => {
-	register.handleRegister(req, res, knex, bcrypt, validationResult);
-});
-// get user profile
-app.get('/profile/:id', (req, res) => {
-	profile.handleProfile(req, res, knex);
-});
-// api request
-app.post('/apiRequest', (req, res) => {
-  image.apiRequest(req, res);
-})
-// update entries
-app.put('/image', (req, res) => {
-	image.handleImage(req, res, knex);
-});
+app.get("/", (req, res) => res.send('workging'));
+app.get("/profile/:id", profile.handleProfile(db, bcrypt));
+app.post("/signin", signin.handleSignIn(db, bcrypt));
+app.post("/register", register.handleRegister(db, bcrypt));
+app.put("/img", img.handleImage(db, bcrypt));
 
-app.listen(process.env.PORT || 3000);
+
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`app is running on port ${PORT}`);
+});
