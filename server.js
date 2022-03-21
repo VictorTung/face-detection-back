@@ -5,7 +5,7 @@ const cors = require("cors");
 const { Client } = require('pg');
 
 // const signin = require("./controller/signin");
-// const register = require("./controller/register");
+const register = require("./controller/register");
 // const img = require("./controller/img");
 const profile = require("./controller/profile");
 
@@ -30,12 +30,12 @@ app.get("/", (req, res) => res.send('workging'));
 app.get("/all", (req, res) => {
 
   db.query('SELECT * FROM users;', (error, response) => {
-    res.json(response)
+    res.json(response.rows)
   });  
 });
 app.get("/profile/:id", profile.handleProfile(db, bcrypt));
 // app.post("/signin", signin.handleSignIn(db, bcrypt));
-// app.post("/register", register.handleRegister(db, bcrypt));
+app.post("/register", register.handleRegister(db, bcrypt));
 // app.put("/img", img.handleImage(db, bcrypt));
 
 
