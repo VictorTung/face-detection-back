@@ -1,20 +1,24 @@
 const express = require("express");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
-const knex = require("knex");
+// const knex = require("knex");
+const { Client } = require('pg');
 
 const signin = require("./controller/signin");
 const register = require("./controller/register");
 const img = require("./controller/img");
 const profile = require("./controller/profile");
 
-const db = knex({
-  client: "pg",
+
+
+const db = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
-  },
+  }
 });
+
+
 
 const app = express();
 
@@ -23,11 +27,14 @@ app.use(cors());
 
 app.get("/", (req, res) => res.send('workging'));
 app.get("/all", (req, res) => {
-  db.select("*")
-  .from("users")
-  .then(response => {
+  client.connect();
+
+  client.query('SELECT * FROM users;', (error, response) => {
+    if (error) throw error;
     res.json(response)
-  })
+  });
+  
+  client.end();
 });
 app.get("/profile/:id", profile.handleProfile(db, bcrypt));
 app.post("/signin", signin.handleSignIn(db, bcrypt));
