@@ -31,21 +31,8 @@ const client = new Client({
   }
 });
 
-client.connect();
-
-client.query('SELECT * FROM login;', (err, res) => {
-  if (err) throw err;
-  for (let row of res.rows) {
-    console.log(JSON.stringify(row));
-  }
-});
-
 const db = knex({
-  client: "pg",
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  client: client
 });
 
 const app = express();
