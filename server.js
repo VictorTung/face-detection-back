@@ -28,7 +28,7 @@ const profile = require("./controller/profile");
 //   connectionString: process.env.DATABASE_URL,
 //   ssl: {
 //     rejectUnauthorized: false
-//   }
+//   }1
 // });
 
 const db = knex({
