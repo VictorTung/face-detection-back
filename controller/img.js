@@ -21,9 +21,10 @@ const handleImage = (db, bcrypt) => (req, res) => {
     .then((response) => {
       console.log(1);
       console.log(response);
+      console.log(1);
       pool.query('UPDATE users SET entries = 1 WHERE id = $1 RETURNING entries;', [id], (error, entries) => {
+        console.log(entries);
           if (entries.length) {
-            console.log(entries);
             res.json({
               entries: entries.rows[0].entries,
               results: response,
