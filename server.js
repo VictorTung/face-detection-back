@@ -33,6 +33,15 @@ app.get("/all", (req, res) => {
     res.json(response.rows)
   });  
 });
+app.post("/add", async (req, res) => {
+
+  await db.query('BEGIN')
+  const queryText = 'INSERT INTO login(email, hash) VALUES($1,$2) RETURNING email'
+  const response = await db.query(queryText, [email, hash])
+  res.json(response)
+});
+
+
 app.get("/profile/:id", profile.handleProfile(db, bcrypt));
 // app.post("/signin", signin.handleSignIn(db, bcrypt));
 app.post("/register", register.handleRegister(db, bcrypt));
