@@ -8,16 +8,31 @@ const register = require("./controller/register");
 const img = require("./controller/img");
 const profile = require("./controller/profile");
 
+// My PC
+// const db = knex({
+//   client: "pg",
+//   connection: {
+//     host: "127.0.0.1",
+//     port: 5432,
+//     user: "postgres",
+//     password: "password",
+//     database: "smart-brain",
+//   },
+// });
+
+// heroku
 const db = knex({
   client: "pg",
   connection: {
-    host: "127.0.0.1",
+    host: "postgresql-shallow-13183",
     port: 5432,
     user: "postgres",
     password: "password",
     database: "smart-brain",
   },
 });
+
+
 
 const app = express();
 
