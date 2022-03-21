@@ -7,6 +7,8 @@ const clarifaiApp = new Clarifai.App({
 const handleImage = (db, bcrypt) => (req, res) => {
   const { id, imgURL } = req.body;
 
+  console.log(id);
+  console.log(imgURL);
   clarifaiApp.models
     .predict("a403429f2ddf4b49b307e318f00e528b", imgURL)
     .then((response) => {
