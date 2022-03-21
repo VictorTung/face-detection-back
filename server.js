@@ -2,7 +2,6 @@ const express = require("express");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
-const { pg } = require('pg');
 
 const signin = require("./controller/signin");
 const register = require("./controller/register");
@@ -33,11 +32,9 @@ const profile = require("./controller/profile");
 // });
 
 const db = knex({
-  client: pg,
+  client: 'pg',
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  ssl: false
 });
 
 const app = express();
