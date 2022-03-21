@@ -14,7 +14,7 @@ const handleRegister = (db, bcrypt) => (req, res) => {
   (async () => {
     const db = await pool.connect()
     try {
-      await db.query('BEGIN')
+      // await db.query('BEGIN')
       const queryText = 'INSERT INTO login(email, hash) VALUES($1,$2) RETURNING email'
       const res = await db.query(queryText, [email, hash])
       console.log(1);
