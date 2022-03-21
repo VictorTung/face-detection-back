@@ -38,13 +38,12 @@ app.post("/add", async (req, res) => {
   const hash = bcrypt.hashSync(password);
 
   await db.query('BEGIN')
-  const queryText = 'INSERT INTO login(email, hash) VALUES($1,$2)'
-  await db.query(queryText, [email, hash])
+  const queryText = 'INSERT INTO login(email, hash) VALUES($1,$2) RETURNING email'
+  const response = await db.query(queryText, [email, hash])
   const insertuser = 'INSERT INTO users(name, email, joined) VALUES ($1, $2, $3)'
-  const insertuserValues = [name, email, new Date()]
+  const insertuserValues = [name, response.rows[0], new Date()]
   await db.query(insertuser, insertuserValues)
-  res.json('done')
-  // res.json(response.rows[0])
+  res.json(response.rows[0])
 });
 
 
