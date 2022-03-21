@@ -23,13 +23,10 @@ const profile = require("./controller/profile");
 // heroku
 const db = knex({
   client: "pg",
-  connection: {
-    host: "postgresql-shallow-13183",
-    port: 5432,
-    user: "postgres",
-    password: "password",
-    database: "smart-brain",
-  },
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 
