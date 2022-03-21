@@ -18,6 +18,7 @@ const db = new Client({
   }
 });
 
+db.connect();
 
 
 const app = express();
@@ -27,15 +28,12 @@ app.use(cors());
 
 app.get("/", (req, res) => res.send('workging'));
 app.get("/all", (req, res) => {
-  db.connect();
 
   db.query('SELECT * FROM users;', (error, response) => {
     console.log(response);
     console.log(error);
     res.json(response)
-  });
-  
-  db.end();
+  });  
 });
 app.get("/profile/:id", profile.handleProfile(db, bcrypt));
 // app.post("/signin", signin.handleSignIn(db, bcrypt));
