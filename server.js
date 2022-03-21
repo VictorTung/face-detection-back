@@ -21,12 +21,12 @@ const profile = require("./controller/profile");
 // });
 
 // heroku
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+
 const db = knex({
   client: "pg",
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: true,
 });
 
 const app = express();
@@ -36,8 +36,8 @@ app.use(cors());
 
 app.get("/all", (req, res) => {
   db.select("*")
-          .from("login")
-          .then((user) => res.json(user[0]))
+    .from("login")
+    .then((user) => res.json(user[0]));
 });
 
 app.get("/", (req, res) => {
