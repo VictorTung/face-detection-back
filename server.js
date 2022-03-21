@@ -22,7 +22,9 @@ const profile = require("./controller/profile");
 
 // heroku
 
+console.log(1);
 console.log(process.env.DATABASE_URL);
+console.log(1);
 
 const db = knex({
   client: "pg",
