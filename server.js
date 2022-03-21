@@ -21,13 +21,13 @@ const profile = require("./controller/profile");
 // });
 
 // heroku
-const db = knex({
-  client: "pg",
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+// const db = knex({
+//   client: "pg",
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false,
+//   },
+// });
 
 const app = express();
 
