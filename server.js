@@ -30,8 +30,6 @@ app.get("/", (req, res) => res.send('workging'));
 app.get("/all", (req, res) => {
 
   db.query('SELECT * FROM users;', (error, response) => {
-    console.log(response);
-    console.log(error);
     res.json(response)
   });  
 });
