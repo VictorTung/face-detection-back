@@ -34,9 +34,16 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.get("/all", (req, res) => {
+  db.select("*")
+          .from("login")
+          .then((user) => res.json(user[0]))
+});
+
 app.get("/", (req, res) => {
   res.send("work!");
 });
+
 app.get("/profile/:id", profile.handleProfile(db, bcrypt));
 app.post("/signin", signin.handleSignIn(db, bcrypt));
 app.post("/register", register.handleRegister(db, bcrypt));
