@@ -34,8 +34,12 @@ const profile = require("./controller/profile");
 const db = knex({
   client: 'pg',
   connectionString: process.env.DATABASE_URL,
-  ssl: true
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
+console.log(db);
 
 const app = express();
 
