@@ -9,9 +9,9 @@ const image = require('./controllers/image.js');
 const { check, validationResult } = require('express-validator/check');
 const knex = require('knex')({
   client: 'pg',
-  connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
   }
 });
 
