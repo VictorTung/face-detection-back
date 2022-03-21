@@ -1,35 +1,56 @@
 const express = require('express');
-const bodyParser = require('body-parser'); // latest version of exressJS now comes with Body-Parser!
-const bcrypt = require('bcrypt-nodejs');
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 const cors = require('cors');
-const knex = require('knex');
-
-const register = require('./controllers/register');
-const signin = require('./controllers/signin');
-const profile = require('./controllers/profile');
-const image = require('./controllers/image');
-const auth = require('./controllers/authorization');
-
-//Database Setup - add your own information here based on the DB you created
-const db = knex({
-  client: "pg",
-  connectionString: process.env.DATABASE_URL,
-  ssl: true
+const signin = require('./controllers/signin.js');
+const register = require('./controllers/register.js');
+const profile = require('./controllers/profile.js');
+const image = require('./controllers/image.js');
+const { check, validationResult } = require('express-validator/check');
+const knex = require('knex')({
+  client: 'pg',
+  connection: {
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+  }
 });
 
 const app = express();
+// middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
 
-app.use(cors())
-app.use(express.json()); // latest version of exressJS now comes with Body-Parser!
-
-app.post('/signin', signin.signinAuthentication(db, bcrypt))
-app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
-app.get('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileGet(req, res, db)})
-app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileUpdate(req, res, db)})
-app.put('/image', auth.requireAuth, (req, res) => { image.handleImage(req, res, db)})
-app.post('/imageurl', auth.requireAuth, (req, res) => { image.handleApiCall(req, res)})
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`app is running on port ${PORT}`);
+// just a greet message
+app.get('/', (req, res) => {
+  res.json('It is working!');
 });
+// signin endpoint
+app.post('/signin', [
+  check('email').isEmail().normalizeEmail(),
+  check('password').isLength({min:3}).escape()
+],(req, res) => {
+	signin.handleSignIn(req, res, knex, bcrypt, validationResult);
+});
+// register endpoint
+app.post('/register', [
+  check('name').isLength({min:2}).trim().escape(),
+  check('email').isEmail().normalizeEmail(),
+  check('password').isLength({min:3}).escape()
+], (req, res) => {
+	register.handleRegister(req, res, knex, bcrypt, validationResult);
+});
+// get user profile
+app.get('/profile/:id', (req, res) => {
+	profile.handleProfile(req, res, knex);
+});
+// api request
+app.post('/apiRequest', (req, res) => {
+  image.apiRequest(req, res);
+})
+// update entries
+app.put('/image', (req, res) => {
+	image.handleImage(req, res, knex);
+});
+
+app.listen(process.env.PORT || 3000);

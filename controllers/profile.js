@@ -1,33 +1,20 @@
-const handleProfileGet = (req, res, db) => {
-  const { id } = req.params;
-  db.select('*').from('users').where({id})
-    .then(user => {
-      if (user.length) {
-        res.json(user[0])
-      } else {
-        res.status(400).json('Not found')
-      }
-    })
-    .catch(err => res.status(400).json('error getting user'))
-}
-
-const handleProfileUpdate = (req, res, db) => {
-  const { id } = req.params
-  const { name, age, pet } = req.body.formInput
-  db('users')
-  .where({ id })
-  .update({ name: name })
-  .then(resp => {
-    if (resp) {
-      res.json("success")
-    } else {
-      res.status(400).json('Not found')
-    }
-  })
-  .catch(err => res.status(400).json('error updating user'))
+const handleProfile = (req, res, knex) => {
+	knex('users').where({
+	  id: Number(req.params.id),
+	}).select()
+	.then(user => {
+		if (user.length === 0) {
+			res.json('fail');
+		} else {
+			res.send(JSON.stringify({
+				id: user[0].id,
+				name: user[0].name,
+				entries: user[0].entries
+			}));
+		}
+	})
 }
 
 module.exports = {
-  handleProfileGet,
-  handleProfileUpdate
+	handleProfile: handleProfile
 }
