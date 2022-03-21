@@ -19,12 +19,8 @@ const handleImage = (db, bcrypt) => (req, res) => {
   clarifaiApp.models
     .predict("a403429f2ddf4b49b307e318f00e528b", imgURL)
     .then((response) => {
-      console.log(1);
-      console.log(response);
-      console.log(1);
-      pool.query('UPDATE users SET entries = 1 WHERE id = $1 RETURNING entries;', [id], (error, entries) => {
-        console.log(entries);
-          if (entries.length) {
+      pool.query('UPDATE users SET entries = entries+1 WHERE id = $1 RETURNING entries;', [id], (error, entries) => {
+          if (entries.rows[0].length) {
             res.json({
               entries: entries.rows[0].entries,
               results: response,
