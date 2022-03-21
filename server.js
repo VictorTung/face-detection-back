@@ -8,11 +8,25 @@ const register = require("./controller/register");
 const img = require("./controller/img");
 const profile = require("./controller/profile");
 
-const client = new Client({
+// My PC
+// const db = knex({
+//   client: "pg",
+//   connection: {
+//     host: "127.0.0.1",
+//     port: 5432,
+//     user: "postgres",
+//     password: "password",
+//     database: "smart-brain",
+//   },
+// });
+
+// heroku
+
+const db = knex({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 });
 
 const app = express();
@@ -21,15 +35,9 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/all", (req, res) => {
-  client
-  .connect()
-  .query('SELECT * FROM login',(err, response)=>{
-    if(err){
-      console.log(err);
-    }else{
-      res.json(response)
-    }
-  })
+  db.select("*")
+    .from("login")
+    .then((user) => res.json(user[0]));
 });
 
 app.get("/", (req, res) => {
