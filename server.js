@@ -21,12 +21,11 @@ const profile = require("./controller/profile");
 // });
 
 // heroku
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 const db = knex({
   client: "pg",
   connectionString: process.env.DATABASE_URL,
-  ssl: true,
+  ssl: true
 });
 
 const app = express();
