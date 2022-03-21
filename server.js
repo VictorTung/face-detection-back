@@ -47,8 +47,9 @@ const pool = new Pool({
 })
 
 app.put("/imgtest", (req, res)=>{
-  pool.query('UPDATE users SET entries = 1 WHERE id = 6', (error, entries) => {
+  pool.query('UPDATE users SET entries = entries+1 WHERE id = 6', (error, entries) => {
     console.log(entries);
+    res.json('success')
     // if (entries.length) {
     //   console.log(entries);
     //   res.json({
