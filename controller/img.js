@@ -10,20 +10,17 @@ const handleImage = (db, bcrypt) => (req, res) => {
   clarifaiApp.models
     .predict("a403429f2ddf4b49b307e318f00e528b", imgURL)
     .then((response) => {
-      db("users")
-        .where({ id })
-        .increment("entries", 1)
-        .returning("entries")
-        .then((entries) => {
+        db.query('UPDATE users SET entries = entries+1 WHERE id = $1 RETURNING entries;', [id], (error, entries) => {
           if (entries.length) {
+            console.log(entries);
             res.json({
-              entries: entries[0].entries,
+              entries: entries.rows[0].entries,
               results: response,
             });
           } else {
-            res.status(400).json("server error");
+            res.status(400).json(`server error: ${error}`);
           }
-        });
+        });  
     })
     .catch((err) => res.status(400).json(err));
 };
