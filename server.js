@@ -37,6 +37,18 @@ app.get("/profile/:id", profile.handleProfile(db, bcrypt));
 app.post("/signin", signin.handleSignIn(db, bcrypt));
 app.post("/register", register.handleRegister(bcrypt));
 app.put("/img", img.handleImage(db, bcrypt));
+app.put("/imgtest", (req, res)=>{
+  db.query('UPDATE users SET entries = 1 WHERE id = $1 RETURNING entries;', [6], (error, entries) => {
+    if (entries.length) {
+      console.log(entries);
+      res.json({
+        entries: entries.rows[0].entries,
+      });
+    } else {
+      res.status(400).json(`server error: ${error}`);
+    }
+  });  
+});
 
 
 const PORT = process.env.PORT || 3001
