@@ -17,11 +17,11 @@ const handleRegister = (db, bcrypt) => (req, res) => {
       await db.query('BEGIN')
       const queryText = 'INSERT INTO login(email, hash) VALUES($1,$2) RETURNING email'
       const res = await db.query(queryText, [email, hash])
-      await console.log(1);
-      await console.log(res);
-      await console.log(1);
+      console.log(1);
+      console.log(res);
+      console.log(1);
       const insertuser = 'INSERT INTO users(name, email, hash) VALUES ($1, $2, $3)'
-      const insertuserValues = await [name, res.rows[0].email, password]
+      const insertuserValues = [name, res, password]
       await db.query(insertuser, insertuserValues)
       await db.query('COMMIT')
     } catch (e) {
