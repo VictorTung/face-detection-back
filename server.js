@@ -36,9 +36,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get("/all", (req, res) => {
+app.get("/all", async (req, res) => {
+  client.connect();
   const { rows } = await client.query("SELECT * FROM login");
   res.json(rows[0]);
+  client.end();
 });
 
 app.get("/", (req, res) => {
