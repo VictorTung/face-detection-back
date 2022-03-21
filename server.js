@@ -57,7 +57,6 @@ app.put("/imgtest", (req, res)=>{
     // } else {
     //   res.status(400).json(`server error: ${error}`);
     // }
-    pool.end();
   });  
 });
 
