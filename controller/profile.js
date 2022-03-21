@@ -1,5 +1,3 @@
-const { json } = require("express/lib/response");
-
 const handleProfile = (db, bcrypt) => (req, res) => {
   const { id } = req.params;
 
