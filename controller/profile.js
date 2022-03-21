@@ -1,15 +1,15 @@
 const handleProfile = (db, bcrypt) => (req, res) => {
   const { id } = req.params;
 
-  db("users")
-    .where({ id })
-    .then((response) => {
-      if (response.length) {
-        res.json(response[0]);
-      } else {
-        res.status(400).json("user not found");
-      }
+    db.connect();
+
+    db.query('SELECT * FROM users WHERE id = $1', [id], (error, response) => {
+      console.log(response);
+      console.log(error);
+      res.json(response)
     });
+    
+    db.end();
 };
 
 module.exports = {
