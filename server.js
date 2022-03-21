@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
+const { pg } = require('pg');
 
 const signin = require("./controller/signin");
 const register = require("./controller/register");
@@ -22,17 +23,21 @@ const profile = require("./controller/profile");
 
 // heroku
 
-const { Client } = require('pg');
+// const { Client } = require('pg');
 
-const client = new Client({
+// const client = new Client({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false
+//   }
+// });
+
+const db = knex({
+  client: pg,
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
-});
-
-const db = knex({
-  client: client
 });
 
 const app = express();
@@ -43,7 +48,7 @@ app.use(cors());
 app.get("/all", (req, res) => {
   db.select("*")
     .from("login")
-    .then((user) => res.json(user[0]));
+    .then((user) => res.json(user));
 });
 
 app.get("/", (req, res) => {
