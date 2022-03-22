@@ -14,7 +14,7 @@ const handleSignIn = (db, bcrypt) => (req, res) => {
         return res.status(400).json("invalid password or email");
       }
       db.query('SELECT * FROM users WHERE email = $1', [email], (error2, user) => {
-        res.append("Access-Control-Allow-Origin", "*").json(user.rows[0])
+        res.json(user.rows[0])
       })
     });
 };
