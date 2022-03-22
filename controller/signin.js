@@ -1,5 +1,6 @@
 const handleSignIn = (db, bcrypt) => (req, res) => {
   const { email, password } = req.body;
+  console.log(req)
   console.log(email);
   console.log(password);
 
