@@ -1,12 +1,4 @@
-const { Pool } = require('pg')
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-})
-
-const handleRegister = (bcrypt) => (req, res) => {
+const handleRegister = (pool, bcrypt) => (req, res) => {
   const { name, password, email } = req.body;
   const hash = bcrypt.hashSync(password);
   

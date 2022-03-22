@@ -1,17 +1,11 @@
 const Clarifai = require("clarifai");
-const { Pool } = require("pg");
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+
 
 const clarifaiApp = new Clarifai.App({
   apiKey: "2640b395f7c349148a8ce86d50ab5b98",
 });
 
-const handleImage = (db, bcrypt) => (req, res) => {
+const handleImage = (pool, bcrypt) => (req, res) => {
   const { id, imgURL } = req.body;
 
   console.log(id);
