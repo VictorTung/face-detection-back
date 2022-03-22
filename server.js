@@ -30,7 +30,7 @@ app.use(function (req, res, next) {
     "Origin,X-Requested-With,Content-Type,Accept,content-type,application/json"
   );
   // intercept OPTIONS method
-  if ("OPTIONS" == req.method) {
+  if (req.method == "OPTIONS" ) {
     res.send(200);
   } else {
     next();
