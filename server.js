@@ -31,8 +31,7 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
   next();
 });
-app.use(cors());
-console.log(cors);
+// app.use(cors());
 
 app.get("/", (req, res) => res.send('workging'));
 app.get("/all", (req, res) => {
