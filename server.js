@@ -25,6 +25,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+console.log(cors);
 
 app.get("/", (req, res) => res.send('workging'));
 app.get("/all", (req, res) => {
